@@ -109,7 +109,7 @@ export default function Home() {
 
               <input
                 type="number"
-                id="checkin"
+                id="adults"
                 className=""
                 placeholder=" ADULTS: "
                 name="number"
@@ -117,7 +117,7 @@ export default function Home() {
 
               <input
                 type="number"
-                id="checkin"
+                id="children"
                 className=""
                 placeholder=" CHILDREN: "
                 name="number"
@@ -125,7 +125,7 @@ export default function Home() {
 
               <input
                 type="button"
-                id="checkin"
+                id="checkout"
                 className="checkinbtn"
                 value="CHECK NOW"
                 name="number"
@@ -133,6 +133,8 @@ export default function Home() {
             </div>
           </div>
         </div>
+        {/* hovli */}
+        <div className="hovli"></div>
         {/* <!-- room & suits --> */}
         <div id="room" className="container-md my-5">
           <div className="row text-dark">
