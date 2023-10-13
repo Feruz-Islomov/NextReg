@@ -10,13 +10,12 @@ export default function OrderTakePage() {
   const [loading, setLoading] = useState(false);
 
   const checkinRef = collection(db, "checkins");
-  const getChecksList = async () => {
+  const getCheckins = async () => {
     setLoading(true);
     try {
       const data = await getDocs(checkinRef);
       const fileteredData = data.docs.map((doc) => ({
         ...doc.data(),
-        // id: doc.id,
       }));
       setLoading(false);
       setCheckins(fileteredData);
@@ -25,8 +24,25 @@ export default function OrderTakePage() {
       setLoading(false);
     }
   };
+  const deleteAllCheckins = async () => {
+    setLoading(true);
+    try {
+      const querySnapshot = await getDocs(checkinRef);
+      const batch = writeBatch(db);
+      querySnapshot.forEach((doc) => {
+        batch.delete(doc.ref);
+      });
+      await batch.commit();
+      getCheckins();
+      setCheckins([]);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    getChecksList();
+    getCheckins();
   }, []);
 
   return (
@@ -63,13 +79,17 @@ export default function OrderTakePage() {
                 : null}
             </tbody>
           </table>
-
           <DownloadTableExcel
-            filename={`Orders_${new Date().toString()}`}
-            sheet="orders.xls"
+            filename={`Checkins_${new Date().toString()}`}
+            sheet="checkins.xls"
             currentTableRef={tableRef.current}
           >
-            <button className="btn btn-success">skachat</button>
+            <button
+              // onClick={deleteAllCheckins}
+              className="btn btn-success"
+            >
+              Export to Excel
+            </button>
           </DownloadTableExcel>
         </>
       ) : (

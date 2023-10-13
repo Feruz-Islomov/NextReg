@@ -3,6 +3,7 @@ import Loading from "../Loading";
 import { v4 } from "uuid";
 import { db } from "../../config/firebase-config";
 import { addDoc, collection } from "firebase/firestore";
+import sendMessageToTelegram from "../msgToBot";
 
 export default function Checkinbox() {
   const [from, setFrom] = useState("");
@@ -56,11 +57,15 @@ export default function Checkinbox() {
       setName("");
       setContact("");
       setLoading(false);
+      sendMessageToTelegram(
+        `Order: ${name} just checked in! Contact:${contact} From:${from} to:${to}, adults:${adult} and children:${child}.`
+      );
     } catch (err) {
       console.log(err);
       setLoading(false);
     }
   };
+
   return (
     <>
       <div id="checkinbox" className="checkinbox">

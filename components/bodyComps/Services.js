@@ -28,7 +28,7 @@ export default function Services() {
                 </svg>
                 <div className="d-flex flex-column">
                   <div className="text-white-50 h4">For information</div>
-                  <div className="text-warning h4">+99893 3488522</div>
+                  <div className="text-warning h4">+81 80 6549 2181</div>
                 </div>
               </div>
             </div>

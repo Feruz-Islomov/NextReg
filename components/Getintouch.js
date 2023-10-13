@@ -1,8 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import Footer from "./Footer";
 import Header from "./Header";
+import sendMessageToTelegram from "./msgToBot";
 
 const Getintouch = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    number: "",
+    subject: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+  const handleMsgToBot = () => {
+    console.log();
+    sendMessageToTelegram(
+      `get In Touch: ${formData.name}, ${formData.email}, ${formData.number}, ${formData.subject}: ${formData.message}`
+    );
+  };
   return (
     <>
       {/* <!-- header --> */}
@@ -36,14 +58,14 @@ const Getintouch = () => {
                 <i className="fas fa-phone h1 checkicon sitecolor"></i>
                 <div className="d-flex flex-column">
                   <div className="h5">Reservation</div>
-                  <div className="sitecolor h5">+99893 3488522</div>
+                  <div className="sitecolor h5">+81 80 6549 2181</div>
                 </div>
               </div>
               <div className="d-flex align-items-center my-5">
                 <i className="fas fa-envelope h1 checkicon sitecolor"></i>
                 <div className="d-flex flex-column">
                   <div className="h5">Email info</div>
-                  <div className="sitecolor h5">firuzwest@gmail.com</div>
+                  <div className="sitecolor h5">info@thereghotel.com</div>
                 </div>
               </div>
               <div className="d-flex align-items-center mb-5">
@@ -51,36 +73,52 @@ const Getintouch = () => {
                 <div className="d-flex flex-column">
                   <div className="h5">Adress</div>
                   <div className="sitecolor h5">
-                    11 Mehnat street, Samarkand city 100130, Uzbekistan
+                    7 Mehnat street, Samarkand city 140139, Uzbekistan
                   </div>
                 </div>
               </div>
             </div>
             <div className="col-5">
               <div className="h3 logo text-dark">Get in touch</div>
-              <form action="#">
+              <>
                 <div className="d-flex">
                   <input
                     className="contactinput"
                     type="text"
                     placeholder="Your Name*"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
                   />
                   <input
                     className="contactinput"
-                    type="text"
+                    type="email"
                     placeholder="Your Email*"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="d-flex">
                   <input
                     className="contactinput"
-                    type="number"
+                    type="tel"
                     placeholder="Your Number*"
+                    name="number"
+                    value={formData.number}
+                    onChange={handleChange}
+                    required
                   />
                   <input
                     className="contactinput"
                     type="text"
                     placeholder="Subject*"
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleChange}
+                    required
                   />
                 </div>
                 <div className="d-flex">
@@ -89,15 +127,20 @@ const Getintouch = () => {
                     placeholder="Message*"
                     cols="35"
                     rows="5"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    required
                   ></textarea>
                 </div>
 
                 <input
                   type="button"
+                  onClick={handleMsgToBot}
                   className="contactinput checkinbtn letterspace px-3"
                   value="SEND MESSAGE"
                 />
-              </form>
+              </>
             </div>
           </div>
         </div>
