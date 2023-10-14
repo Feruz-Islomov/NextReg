@@ -31,7 +31,7 @@ export const GettingData = async (colName, setData, ok, setMsgId) => {
     }
     setData(val);
     if (ok) {
-      setMsgId(val[0].id);
+      setMsgId(val[val.length - 1].id);
     }
   } catch (err) {
     console.error(err);

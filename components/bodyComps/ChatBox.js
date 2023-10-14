@@ -7,7 +7,7 @@ import {
   updateMyDocument,
 } from "../firebase/getPost";
 import sendMessageToTelegram from "../msgToBot";
-import { playSound } from "../Notification/NotifySound";
+import { PlaySound } from "../Notification/NotifySound";
 import { StatusAdmin } from "../../pages/_app";
 
 export default function ChatBox() {
@@ -54,7 +54,7 @@ export default function ChatBox() {
         setMsgId(data.id);
       }
       setMsgs([...msgs, data]);
-      playSound();
+      PlaySound();
     };
 
     return () => {
