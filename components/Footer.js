@@ -19,7 +19,11 @@ const Footer = () => {
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsam
                 delectus, repellat officiis esse sit accusamus commodi.
               </p>
-              <a href="https://goo.gl/maps/P9MYWBqhnaqJxC929" target="_blank">
+              <a
+                href="https://goo.gl/maps/P9MYWBqhnaqJxC929"
+                rel="noreferrer"
+                target="_blank"
+              >
                 <button type="button" className="btn btn-info p-2 mb-2">
                   Lokatsiya 1<i className="fas fa-globe mx-2"></i>
                 </button>
