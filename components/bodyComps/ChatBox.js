@@ -1,67 +1,66 @@
 import { useContext, useEffect, useRef, useState } from "react";
 // import { auth } from "../../config/firebase-config";
 import { v4 } from "uuid";
-import {
-  GettingData,
-  emptyMyDocument,
-  updateMyDocument,
-} from "../firebase/getPost";
+import { PostingData, emptyMyDocument } from "../firebase/getPost";
 import sendMessageToTelegram from "../msgToBot";
 import { PlaySound } from "../Notification/NotifySound";
 import { StatusAdmin } from "../../pages/_app";
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  serverTimestamp,
+} from "firebase/firestore";
+import { db } from "../../config/firebase-config";
 
 export default function ChatBox() {
   const { ok } = useContext(StatusAdmin);
-
   const [show, setShow] = useState(false);
   const [msgText, setMsgText] = useState("");
   const [msgs, setMsgs] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
   const [msgId, setMsgId] = useState("");
-  //get msg from firestore
+
   useEffect(() => {
     if (isAdmin === false) {
       setMsgId(v4());
     }
-    GettingData("chatbox", setMsgs, ok, setMsgId);
   }, []);
-
-  // realtime msging
-  const ws = useRef(null);
   const handleMsgToFirebase = () => {
     if (msgText.trim() !== "") {
-      // Send the message to the server
-      const msgServer = { id: msgId, text: msgText, isdispatch: isAdmin };
-      ws.current.send(JSON.stringify(msgServer));
-      setMsgs([...msgs, msgServer]);
+      const msgServer = {
+        id: msgId,
+        text: msgText,
+        isdispatch: isAdmin,
+        createdAt: serverTimestamp(),
+      };
       setMsgText("");
       sendMessageToTelegram(`chat: ${msgText}`);
-      updateMyDocument([...msgs, msgServer]);
+      PostingData("chatbox", msgServer);
     }
   };
+  // realtime fetching
+  const messagesRef = collection(db, "chatbox");
   useEffect(() => {
-    // Connect to the WebSocket server
-    ws.current = new WebSocket("ws://localhost:3030");
-    // Handle messages received from the server
-    ws.current.onmessage = (event) => {
-      // console.log(event.data);
-      const data = JSON.parse(event.data);
-      // Handle the parsed data
-      if (msgId === "") {
-        setMsgId(data.id);
+    const queryMessages = query(
+      messagesRef,
+      // where("id", "==", msgId),
+      orderBy("createdAt")
+    );
+    const unsuscribe = onSnapshot(queryMessages, (snapshot) => {
+      let messages = [];
+      snapshot.forEach((doc) => {
+        messages.push({ ...doc.data() });
+      });
+      setMsgs(messages);
+      if (isAdmin && messages.length > 0) {
+        setMsgId(messages[messages.length - 1].id);
       }
-      if (isAdmin) {
-        setMsgId(data.id);
-      }
-      setMsgs([...msgs, data]);
-      PlaySound();
-    };
-
-    return () => {
-      // Close the WebSocket connection when the component unmounts
-      ws.current.close();
-    };
-  }, [msgs]);
+      if (msgId === msgs[msgs.length - 1]?.id) PlaySound();
+    });
+    return () => unsuscribe();
+  }, []);
 
   //push with enter msg text
   const messageContainerRef = useRef();
@@ -86,7 +85,9 @@ export default function ChatBox() {
             className="badge rounded-pill bg-success cursorpointer mx-2"
             onClick={() => {
               setIsAdmin(true);
-              GettingData("chatbox", setMsgs, ok, setMsgId);
+              if (msgs.length > 0) {
+                setMsgId(msgs[msgs.length - 1].id);
+              }
             }}
           >
             get
@@ -143,7 +144,8 @@ export default function ChatBox() {
                     }`}
                     onClick={() => setMsgId(msg.id)}
                   >
-                    {msg.text}
+                    {msg.text}{" "}
+                    <span className="text-dark">- {msg?.id.substr(-3)}</span>
                   </div>
                 );
               }
@@ -155,7 +157,9 @@ export default function ChatBox() {
               id="msg"
               className="form-control"
               type="text"
-              placeholder="Type your message..."
+              placeholder={`${
+                isAdmin ? msgId?.substr(-3) : "Type your message..."
+              }`}
               value={msgText}
               onChange={(e) => setMsgText(e.target.value)}
               onKeyDown={handleKeyPress}

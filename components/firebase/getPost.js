@@ -25,7 +25,7 @@ export const GettingData = async (colName, setData, ok, setMsgId) => {
     // setData(fileteredData[0].dataToUpdate);
     // setLoading(false);
     const fileteredData = data.docs.map((doc) => doc.data());
-    const val = fileteredData[0].dataToUpdate;
+    const val = fileteredData[0]?.dataToUpdate;
     if (fileteredData.length === 0 || val === undefined) {
       return;
     }
