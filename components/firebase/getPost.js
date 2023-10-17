@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  deleteDoc,
   doc,
   getDocs,
   updateDoc,
@@ -50,12 +51,13 @@ export async function updateMyDocument(dataToUpdate) {
   }
 }
 export async function emptyMyDocument() {
-  const ref = doc(db, "chatbox", "grb8fpjYC6gpYCcJJDnC");
-  try {
-    // Update the document; if it doesn't exist, it will be created
-    await updateDoc(ref, { dataToUpdate: [] });
-    // console.log("Document updated or created successfully!");
-  } catch (error) {
-    console.error("Error updating document: ", error);
-  }
+  const querySnapshot = await getDocs(collection(db, "chatbox"));
+  querySnapshot.forEach(async (doc) => {
+    try {
+      await deleteDoc(doc.ref);
+      // console.log("Document deleted successfully:", doc.id);
+    } catch (error) {
+      console.error("Error deleting document:", doc.id, error);
+    }
+  });
 }
