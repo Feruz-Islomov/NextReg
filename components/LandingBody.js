@@ -1,8 +1,8 @@
-import Slider from "./bodyComps/slider";
-import Checkinbox from "./bodyComps/checkinbox";
-import Rooms from "./bodyComps/rooms";
-import Services from "./bodyComps/services";
-import Facilities from "./bodyComps/facilities";
+import Slider from "./bodyComps/Slider";
+import Checkinbox from "./bodyComps/Checkinbox";
+import Rooms from "./bodyComps/Rooms";
+import Services from "./bodyComps/Services";
+import Facilities from "./bodyComps/Facilities";
 import ChatBox from "./bodyComps/ChatBox";
 
 export default function LandingPage() {
