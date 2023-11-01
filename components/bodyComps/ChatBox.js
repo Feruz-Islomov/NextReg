@@ -57,8 +57,8 @@ export default function ChatBox() {
       if (isAdmin && messages.length > 0) {
         setMsgId(messages[messages.length - 1].id);
       }
-      if (msgId === msgs[msgs.length - 1]?.id) PlaySound();
     });
+
     return () => unsuscribe();
   }, []);
 
@@ -75,6 +75,7 @@ export default function ChatBox() {
       messageContainerRef.current.scrollTop =
         messageContainerRef.current.scrollHeight;
     }
+    if (msgId === msgs[msgs.length - 1]?.id) PlaySound();
   }, [msgs]);
 
   return (

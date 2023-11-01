@@ -5,11 +5,6 @@ import Link from "next/link";
 const Header = () => {
   return (
     <>
-      <Head>
-        <title>The Reg</title>
-        <meta name="description" content="five star hotel" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className="hdr">
         <div className="container-md">
           <header className=" d-flex justify-content-between py-3 border-bottom">

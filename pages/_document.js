@@ -4,6 +4,13 @@ export default function Document() {
   return (
     <Html>
       <Head>
+        <title>reghotel</title>
+        <meta name="description" content="five star hotel" />
+        <meta
+          name="keywords"
+          content="hotel, samarkand, samarkand hotel, reghotel, hostel, five star hotel"
+        />
+        <link rel="icon" type="image/x-icon" href="/favicon.jpg"></link>
         <link
           href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
           rel="stylesheet"

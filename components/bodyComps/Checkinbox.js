@@ -1,9 +1,8 @@
 import { useState } from "react";
 import Loading from "../Loading";
 import { v4 } from "uuid";
-import { db } from "../../config/firebase-config";
-import { addDoc, collection } from "firebase/firestore";
 import sendMessageToTelegram from "../msgToBot";
+import { PostingData } from "../firebase/getPost";
 
 export default function Checkinbox() {
   const [from, setFrom] = useState("");
@@ -15,7 +14,6 @@ export default function Checkinbox() {
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const checkinRef = collection(db, "checkins");
   const handleSubmit = async () => {
     if (
       from === "" ||
@@ -48,7 +46,7 @@ export default function Checkinbox() {
     setShowInput(!showInput);
     setLoading(true);
     try {
-      await addDoc(checkinRef, order);
+      PostingData("checkins", order);
       alert("Successfully checked in, we will contact you soon!");
       setFrom("");
       setTo("");
